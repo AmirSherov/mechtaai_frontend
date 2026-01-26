@@ -23,7 +23,23 @@ import type {
     JournalEntryPublic,
     WeeklyAnalyzeIn,
     WeeklyReviewPublic,
-    WeeklyCommitIn
+    WeeklyCommitIn,
+    FutureStoryPublic,
+    FutureStoryQuestion,
+    FutureStoryDraftIn,
+    FutureStoryDraftPublic,
+    FutureStoryUpdateIn,
+    DailyEnergyResponse,
+    VisualAssetPublic,
+    VisualGenerateIn,
+    VisualRegenerateIn,
+    VisualGenerateResponse,
+    Area,
+    LifeWheel,
+    LifeWheelCreateIn,
+    MeResponse,
+    UserUpdateIn,
+    ChangePasswordIn
 } from './types'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.mechtaai.ru'
@@ -105,6 +121,21 @@ class ApiClient {
                 Authorization: `Bearer ${accessToken}`,
             },
         })
+        return response.data.result
+    }
+
+    async getMeProfile() {
+        const response = await this.client.get<ApiResponse<MeResponse>>('/api/v1/me')
+        return response.data.result
+    }
+
+    async updateMe(payload: UserUpdateIn) {
+        const response = await this.client.put<ApiResponse<MeResponse>>('/api/v1/me', payload)
+        return response.data.result
+    }
+
+    async changePassword(payload: ChangePasswordIn) {
+        const response = await this.client.put<ApiResponse<{ success: boolean }>>('/api/v1/me/password', payload)
         return response.data.result
     }
 
@@ -304,6 +335,98 @@ class ApiClient {
     async commitWeeklyPlan(payload: WeeklyCommitIn, token?: string) {
         const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
         const response = await this.client.post<ApiResponse<Step[]>>('/api/v1/rituals/weekly/commit', payload, config)
+        return response.data.result
+    }
+
+    async getFutureStory(token?: string) {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+        const response = await this.client.get<ApiResponse<FutureStoryPublic | null>>('/api/v1/future-story', config)
+        return response.data.result
+    }
+
+    async getFutureStoryQuestions(token?: string) {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+        const response = await this.client.get<ApiResponse<FutureStoryQuestion[]>>('/api/v1/future-story/questions', config)
+        return response.data.result
+    }
+
+    async saveFutureStoryDraft(payload: FutureStoryDraftIn, token?: string) {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+        const response = await this.client.post<ApiResponse<FutureStoryDraftPublic>>('/api/v1/future-story/draft', payload, config)
+        return response.data.result
+    }
+
+    async generateFutureStory(token?: string) {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+        const response = await this.client.post<ApiResponse<FutureStoryPublic>>('/api/v1/future-story/generate', {}, config)
+        return response.data.result
+    }
+
+    async updateFutureStory(payload: FutureStoryUpdateIn, token?: string) {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+        const response = await this.client.put<ApiResponse<FutureStoryPublic>>('/api/v1/future-story', payload, config)
+        return response.data.result
+    }
+
+    async generateStoryImage(payload: VisualGenerateIn, token?: string) {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+        const response = await this.client.post<ApiResponse<VisualGenerateResponse>>(
+            '/api/v1/visuals/generate-story-image',
+            payload,
+            config
+        )
+        return response.data.result
+    }
+
+    async getStoryGallery(storyId: string, token?: string) {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+        const response = await this.client.get<ApiResponse<VisualAssetPublic[]>>(
+            `/api/v1/visuals/story-gallery/${storyId}`,
+            config
+        )
+        return response.data.result
+    }
+
+    async regenerateVisual(payload: VisualRegenerateIn, token?: string) {
+        const config = token ? { headers: { Authorization: `Bearer ${token}` } } : {}
+        const response = await this.client.post<ApiResponse<VisualAssetPublic>>(
+            '/api/v1/visuals/regenerate',
+            payload,
+            config
+        )
+        return response.data.result
+    }
+
+    async getEsotericsToday(queryDate?: string, token?: string) {
+        const params = queryDate ? { date: queryDate } : {}
+        const config = token
+            ? { headers: { Authorization: `Bearer ${token}` }, params }
+            : { params }
+        const response = await this.client.get<ApiResponse<DailyEnergyResponse>>('/api/v1/esoterics/today', config)
+        return response.data.result
+    }
+
+    async getAreas(includeInactive: boolean = false) {
+        const response = await this.client.get<ApiResponse<{ items: Area[] }>>('/api/v1/areas', {
+            params: { include_inactive: includeInactive }
+        })
+        return response.data.result
+    }
+
+    async getLifeWheelLatest() {
+        const response = await this.client.get<ApiResponse<LifeWheel | null>>('/api/v1/life_wheel/latest')
+        return response.data.result
+    }
+
+    async getLifeWheelHistory(page: number = 1, pageSize: number = 10) {
+        const response = await this.client.get<ApiResponse<{ items: LifeWheel[] }>>('/api/v1/life_wheel', {
+            params: { page, page_size: pageSize }
+        })
+        return { items: response.data.result?.items || [], pagination: response.data.pagination }
+    }
+
+    async createLifeWheel(payload: LifeWheelCreateIn) {
+        const response = await this.client.post<ApiResponse<LifeWheel>>('/api/v1/life_wheel', payload)
         return response.data.result
     }
 }

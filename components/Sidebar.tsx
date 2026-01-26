@@ -16,7 +16,7 @@ const navigation = [
     { name: 'Цели', href: '/dashboard/goals', icon: <FiTarget className="w-5 h-5" /> },
     { name: 'Ритуалы', href: '/dashboard/rituals', icon: <FiSun className="w-5 h-5" /> },
     { name: 'Визуалы', href: '/dashboard/visuals', icon: <FiImage className="w-5 h-5" /> },
-    { name: 'Колесо баланса', href: '/dashboard/life-wheel', icon: <FiPieChart className="w-5 h-5" /> },
+    { name: 'Колесо жизни', href: '/dashboard/life-wheel', icon: <FiPieChart className="w-5 h-5" /> },
     { name: 'Эзотерика', href: '/dashboard/esoterics', icon: <FiStar className="w-5 h-5" /> },
     { name: 'Геймификация', href: '/dashboard/gamification', icon: <FiAward className="w-5 h-5" /> },
     { name: 'Подписка', href: '/dashboard/billing', icon: <FiCreditCard className="w-5 h-5" /> },
@@ -80,4 +80,3 @@ export default function Sidebar() {
         </div>
     )
 }
-
