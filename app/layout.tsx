@@ -10,8 +10,15 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MechtaAI - Telegram Login",
-  description: "Login with Telegram QR Code",
+  metadataBase: new URL("https://mechtaai.ru"),
+  title: "MechtaAI — личный кабинет",
+  description: "Личный кабинет MechtaAI. Доступ только для авторизованных пользователей.",
+  robots: {
+    index: false,
+    follow: false,
+    noarchive: true,
+    nosnippet: true,
+  },
 };
 
 export default function RootLayout({
