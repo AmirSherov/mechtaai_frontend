@@ -1,16 +1,39 @@
-'use client'
+﻿'use client'
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import { apiClient } from '@/lib/api-client'
-import type { MeResponse } from '@/lib/types'
+import type { Goal, MeResponse, Step } from '@/lib/types'
 import { StatCard, ChartCard, ProgressCard } from '@/components/dashboard/Cards'
+
+const GOAL_STATUS_LABELS: Record<string, string> = {
+    planned: 'Запланирована',
+    in_progress: 'В работе',
+    done: 'Выполнена',
+    dropped: 'Отменена'
+}
+
+const STEP_STATUS_LABELS: Record<string, string> = {
+    planned: 'Запланирован',
+    in_progress: 'В работе',
+    done: 'Выполнен',
+    skipped: 'Пропущен'
+}
+
+function formatDate(value?: string | null) {
+    if (!value) return '—'
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return value
+    return date.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })
+}
 
 export default function DashboardPage() {
     const { data: session, status } = useSession()
     const router = useRouter()
     const [me, setMe] = useState<MeResponse | null>(null)
+    const [goals, setGoals] = useState<Goal[]>([])
+    const [steps, setSteps] = useState<Step[]>([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -26,10 +49,30 @@ export default function DashboardPage() {
             }
             try {
                 setLoading(true)
-                const data = await apiClient.getMe(session.accessToken)
-                setMe(data as MeResponse)
+                apiClient.setAuthToken(session.accessToken)
+                const [meData, goalsData, stepsData] = await Promise.all([
+                    apiClient.getMeProfile(),
+                    apiClient.getGoals(),
+                    apiClient.getSteps()
+                ])
+
+                setMe(meData || null)
+
+                const goalsList = Array.isArray(goalsData) ? goalsData : []
+                const sortedGoals = [...goalsList].sort((a, b) =>
+                    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                )
+                setGoals(sortedGoals.slice(0, 3))
+
+                const stepsList = Array.isArray(stepsData) ? stepsData : []
+                const sortedSteps = [...stepsList].sort((a, b) =>
+                    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                )
+                setSteps(sortedSteps.slice(0, 4))
             } catch {
                 setMe(null)
+                setGoals([])
+                setSteps([])
             } finally {
                 setLoading(false)
             }
@@ -71,6 +114,12 @@ export default function DashboardPage() {
                             {me?.plan === 'pro' ? 'План Pro активен' : 'Бесплатный план'}
                         </p>
                     </div>
+                    <button
+                        onClick={() => router.push('/dashboard/settings')}
+                        className="px-4 py-2 rounded-xl border border-[#333] text-sm text-gray-300 hover:text-white hover:border-[#ff6b35]/60 transition"
+                    >
+                        Настройки профиля
+                    </button>
                 </div>
             </header>
 
@@ -101,9 +150,7 @@ export default function DashboardPage() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         <div className="lg:col-span-2 space-y-6">
-                            <ChartCard
-                                title="Использование ресурсов"
-                            >
+                            <ChartCard title="Использование ресурсов">
                                 <div className="space-y-6 pt-2">
                                     <ProgressCard
                                         title="Текстовые запросы"
@@ -119,6 +166,40 @@ export default function DashboardPage() {
                                     />
                                 </div>
                             </ChartCard>
+
+                            <div className="glass rounded-2xl p-6 border border-[#333]">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-lg font-bold text-white">Последние цели</h3>
+                                    <button
+                                        onClick={() => router.push('/dashboard/goals')}
+                                        className="text-sm text-[#ff6b35] hover:underline"
+                                    >
+                                        Все цели
+                                    </button>
+                                </div>
+                                {goals.length === 0 ? (
+                                    <p className="text-sm text-gray-400">Пока нет целей. Создайте первую, чтобы начать движение.</p>
+                                ) : (
+                                    <div className="space-y-4">
+                                        {goals.map((goal) => (
+                                            <div key={goal.id} className="bg-[#0f0f0f] border border-[#2a2a2a] rounded-2xl p-4">
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <div className="text-white font-semibold">{goal.title}</div>
+                                                        <div className="text-xs text-gray-500 mt-1">
+                                                            {GOAL_STATUS_LABELS[goal.status] || goal.status}
+                                                        </div>
+                                                    </div>
+                                                    <div className="text-xs text-gray-500">{goal.horizon}</div>
+                                                </div>
+                                                {goal.description && (
+                                                    <p className="text-sm text-gray-400 mt-2 line-clamp-2">{goal.description}</p>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         <div className="space-y-6">
@@ -141,10 +222,51 @@ export default function DashboardPage() {
                             </div>
 
                             <div className="glass rounded-2xl p-6 border border-[#333]">
-                                <h3 className="text-lg font-bold text-white mb-4">Следующие шаги</h3>
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-lg font-bold text-white">Ближайшие шаги</h3>
+                                    <button
+                                        onClick={() => router.push('/dashboard/steps')}
+                                        className="text-sm text-[#ff6b35] hover:underline"
+                                    >
+                                        Все шаги
+                                    </button>
+                                </div>
+                                {steps.length === 0 ? (
+                                    <p className="text-sm text-gray-400">Пока нет шагов. Создайте план действий.</p>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {steps.map((step) => (
+                                            <div key={step.id} className="bg-[#0f0f0f] border border-[#2a2a2a] rounded-2xl p-3">
+                                                <div className="text-white text-sm font-semibold">{step.title}</div>
+                                                <div className="flex items-center justify-between text-xs text-gray-500 mt-1">
+                                                    <span>{STEP_STATUS_LABELS[step.status] || step.status}</span>
+                                                    <span>{formatDate(step.planned_date)}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="glass rounded-2xl p-6 border border-[#333]">
+                                <h3 className="text-lg font-bold text-white mb-2">Рекомендация</h3>
                                 <p className="text-sm text-gray-400">
-                                    Начните с раздела «Хочу», чтобы сформировать базу для истории будущего и целей.
+                                    Обновите колесо жизни и цели — так AI сможет точнее подсветить фокус недели.
                                 </p>
+                                <div className="flex gap-3 mt-4">
+                                    <button
+                                        onClick={() => router.push('/dashboard/life-wheel')}
+                                        className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] text-white rounded-xl hover:bg-[#222] transition-colors text-sm"
+                                    >
+                                        Колесо жизни
+                                    </button>
+                                    <button
+                                        onClick={() => router.push('/dashboard/rituals')}
+                                        className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] text-white rounded-xl hover:bg-[#222] transition-colors text-sm"
+                                    >
+                                        Ритуалы
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
