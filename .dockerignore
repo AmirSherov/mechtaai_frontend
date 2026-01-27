@@ -1,0 +1,8 @@
+﻿# Docker build output
+.next
+# dependencies
+node_modules
+# vcs
+.git
+# logs
+npm-debug.log*
