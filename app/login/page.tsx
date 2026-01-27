@@ -112,7 +112,7 @@ export default function QRLoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center bg-transparent relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-[#ff6b35]/5 via-transparent to-[#ff4500]/5"></div>
 
             <div className="w-full max-w-md p-8 relative z-10">

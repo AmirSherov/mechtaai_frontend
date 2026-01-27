@@ -27,8 +27,9 @@ export default function Sidebar() {
     const pathname = usePathname()
 
     return (
-        <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-50 bg-[#050505] border-r border-[#333]">
-            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+        <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 md:left-0 z-50 p-4">
+            <div className="flex h-full flex-col glass rounded-3xl border border-white/10">
+                <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                 <div className="flex items-center flex-shrink-0 px-6 mb-8 cursor-pointer">
                     <div className="w-10 h-10 gradient-orange rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(255,107,53,0.3)]">
                         <span className="text-white font-bold text-xl">M</span>
@@ -61,7 +62,7 @@ export default function Sidebar() {
                 </nav>
             </div>
 
-            <div className="flex-shrink-0 flex border-t border-[#333] p-4 bg-[#0a0a0a]">
+                <div className="flex-shrink-0 flex border-t border-white/10 p-4">
                 <button
                     onClick={() => signOut({ callbackUrl: '/login' })}
                     className="flex-shrink-0 w-full group block"
@@ -76,6 +77,7 @@ export default function Sidebar() {
                         </div>
                     </div>
                 </button>
+                </div>
             </div>
         </div>
     )

@@ -87,7 +87,7 @@ export default function DashboardPage() {
 
     if (status === 'loading' || loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-black">
+            <div className="min-h-screen flex items-center justify-center bg-transparent">
                 <div className="w-12 h-12 rounded-full border-2 border-[#ff6b35] border-t-transparent animate-spin"></div>
             </div>
         )
@@ -103,7 +103,7 @@ export default function DashboardPage() {
 
     return (
         <>
-            <header className="sticky top-0 z-40 bg-black/80 backdrop-blur-md border-b border-[#333] px-8 py-5">
+            <header className="sticky top-0 z-40 px-8 py-5 bg-transparent">
                 <div className="flex items-center justify-between max-w-7xl mx-auto w-full">
                     <div>
                         <h1 className="text-2xl font-bold text-white tracking-tight">
@@ -116,7 +116,7 @@ export default function DashboardPage() {
                     </div>
                     <button
                         onClick={() => router.push('/dashboard/settings')}
-                        className="px-4 py-2 rounded-xl border border-[#333] text-sm text-gray-300 hover:text-white hover:border-[#ff6b35]/60 transition"
+                        className="px-4 py-2 rounded-xl text-sm text-gray-200 btn-glass"
                     >
                         Настройки профиля
                     </button>
@@ -256,13 +256,13 @@ export default function DashboardPage() {
                                 <div className="flex gap-3 mt-4">
                                     <button
                                         onClick={() => router.push('/dashboard/life-wheel')}
-                                        className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] text-white rounded-xl hover:bg-[#222] transition-colors text-sm"
+                                        className="px-4 py-2 text-white rounded-xl text-sm btn-glass"
                                     >
                                         Колесо жизни
                                     </button>
                                     <button
                                         onClick={() => router.push('/dashboard/rituals')}
-                                        className="px-4 py-2 bg-[#1a1a1a] border border-[#2a2a2a] text-white rounded-xl hover:bg-[#222] transition-colors text-sm"
+                                        className="px-4 py-2 text-white rounded-xl text-sm btn-glass"
                                     >
                                         Ритуалы
                                     </button>

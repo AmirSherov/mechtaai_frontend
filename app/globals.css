@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 @theme {
   --color-primary: #ff6b35;
@@ -10,33 +10,124 @@
 :root {
   --background: 0 0% 0%;
   --foreground: 0 0% 100%;
-
-  /* Bright Orange Palette */
   --orange-primary: #ff6b35;
   --orange-bright: #ff8c42;
   --orange-glow: rgba(255, 107, 53, 0.6);
   --orange-dim: rgba(255, 107, 53, 0.1);
+  --glass-bg: rgba(15, 15, 15, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.08);
+  --site-bg-image: url('/background.jpg');
+  --site-bg-dim: rgba(0, 0, 0, 0.45);
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  background: black;
   color: white;
   overflow-x: hidden;
+  position: relative;
+  background-color: #050505;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+  background-image:
+    var(--site-bg-image),
+    radial-gradient(1200px 800px at 10% 10%, rgba(255, 107, 53, 0.12), transparent 60%),
+    radial-gradient(1000px 700px at 90% 20%, rgba(255, 140, 66, 0.1), transparent 55%),
+    radial-gradient(900px 600px at 30% 80%, rgba(255, 69, 0, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.8) 100%);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  filter: blur(6px) saturate(95%) brightness(0.8);
+  transform: scale(1.02);
+  image-rendering: auto;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
+    linear-gradient(180deg, var(--site-bg-dim), rgba(0, 0, 0, 0.7));
+  mix-blend-mode: normal;
 }
 
 /* Glass Effects */
 .glass {
-  background: rgba(20, 20, 20, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 var(--glass-highlight),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.btn-glass {
+  background: rgba(15, 15, 15, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(14px) saturate(140%);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-glass:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(255, 107, 53, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+button,
+input[type='button'],
+input[type='submit'],
+input[type='reset'] {
+  background: rgba(15, 15, 15, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px) saturate(135%);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover,
+input[type='button']:hover,
+input[type='submit']:hover,
+input[type='reset']:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.35),
+    0 0 10px rgba(255, 107, 53, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
 }
 
 .glass-orange {
-  background: linear-gradient(135deg, rgba(255, 107, 53, 0.15) 0%, rgba(255, 69, 0, 0.05) 100%);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 107, 53, 0.3);
-  box-shadow: 0 0 15px rgba(255, 107, 53, 0.1);
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(255, 69, 0, 0.08) 100%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 107, 53, 0.35);
+  box-shadow:
+    0 10px 25px rgba(255, 107, 53, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* Gradients */
@@ -73,7 +164,6 @@ body {
 
 /* Animations */
 @keyframes pulse-orange {
-
   0%,
   100% {
     box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
@@ -89,7 +179,6 @@ body {
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0);
