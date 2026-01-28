@@ -41,7 +41,7 @@ export default function WantsWizard({ accessToken }: { accessToken: string }) {
                     // Create new draft
                     currentDraft = await apiClient.createWantsDraft()
                 } else {
-                    console.error('?? ??????? ???????? ????????', e)
+                    console.error('Не удалось загрузить черновик', e)
                 }
             }
 
@@ -60,7 +60,7 @@ export default function WantsWizard({ accessToken }: { accessToken: string }) {
             }
 
         } catch (error) {
-            console.error('?? ??????? ????????? ?????? ?? ?????', error)
+            console.error('Не удалось загрузить данные по желаниям', error)
         } finally {
             setLoading(false)
         }
@@ -98,7 +98,7 @@ export default function WantsWizard({ accessToken }: { accessToken: string }) {
                 setAnalyzing(false) // Done
             }
         } catch (error) {
-            console.error('?? ??????? ????????? ??????', error)
+            console.error('Не удалось завершить анализ', error)
             setAnalyzing(false)
             alert('Не удалось завершить анализ. Попробуйте еще раз.')
         }

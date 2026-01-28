@@ -51,7 +51,7 @@ export default function ReverseStep({ initialData, onComplete, apiClient }: Reve
                 }
             }
         } catch (error) {
-            console.error('?? ??????? ?????????', error)
+            console.error('Не удалось сохранить ответы', error)
         } finally {
             setIsSaving(false)
         }

@@ -40,45 +40,45 @@ export default function ReverseStep({ onComplete }: ReverseStepProps) {
         <div className="max-w-3xl mx-auto space-y-6 animate-fade-in">
             <div className="glass p-8 rounded-2xl space-y-8">
                 <header className="text-center space-y-2">
-                    <h2 className="text-2xl font-bold text-white">???????? ??????</h2>
+                    <h2 className="text-2xl font-bold text-white">Метод от обратного</h2>
                     <p className="text-gray-400">
-                        ???????? ?????? ? ???? ??????? ????? ?????? ? ????????????.
+                        Иногда проще понять, чего мы хотим, поняв, чего нам не хватает и о чем мы жалеем.
                     </p>
                 </header>
 
                 <div className="space-y-4">
                     <label className="block text-sm font-medium text-gray-300">
-                        1. ???? ?? ????????? ? ??????? (??????? ??????? ? ??? ??????? ???????)
+                        1. Кому или чему вы завидуете? (Белая зависть — индикатор ваших скрытых желаний)
                     </label>
                     <textarea
                         value={form.envy}
                         onChange={(e) => handleChange('envy', e.target.value)}
                         className="w-full h-24 bg-black/20 border border-white/10 rounded-xl p-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#ff6b35]/50"
-                        placeholder="? ???????..."
+                        placeholder="Я завидую..."
                     />
                 </div>
 
                 <div className="space-y-4">
                     <label className="block text-sm font-medium text-gray-300">
-                        2. ? ??? ?? ?????? ??????, ???? ?? ???????? ??? ????? 10 ????
+                        2. О чем вы будете жалеть, если не сделаете это сейчас?
                     </label>
                     <textarea
                         value={form.regrets}
                         onChange={(e) => handleChange('regrets', e.target.value)}
                         className="w-full h-24 bg-black/20 border border-white/10 rounded-xl p-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#ff6b35]/50"
-                        placeholder="? ???? ??????, ???? ??..."
+                        placeholder="Я буду жалеть, если не..."
                     />
                 </div>
 
                 <div className="space-y-4">
                     <label className="block text-sm font-medium text-gray-300">
-                        3. ???? ?? ?? ?????, ??? ?? ?????? ???????????, ??? ?? ?? ??????? ?? 5 ????
+                        3. Что конкретно нужно делать в ближайшие 5 лет, чтобы прийти к желаемой жизни?
                     </label>
                     <textarea
                         value={form.fiveYear}
                         onChange={(e) => handleChange('fiveYear', e.target.value)}
                         className="w-full h-24 bg-black/20 border border-white/10 rounded-xl p-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#ff6b35]/50"
-                        placeholder="? ??..."
+                        placeholder="В ближайшие 5 лет мне нужно..."
                     />
                 </div>
 
@@ -88,7 +88,7 @@ export default function ReverseStep({ onComplete }: ReverseStepProps) {
                         disabled={loading || !isReady}
                         className="px-6 py-3 bg-[#ff6b35] hover:bg-[#ff8c61] text-white font-medium rounded-xl transition-colors disabled:opacity-50 flex items-center gap-2"
                     >
-                        {loading ? '?????????...' : '????????? ? ???????'}
+                        {loading ? 'Сохранение...' : 'Завершить этап'}
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>

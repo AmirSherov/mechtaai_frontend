@@ -132,7 +132,7 @@ export default function DashboardPage() {
                         />
                         <StatCard
                             title="Текущий план"
-                            value={me?.plan === 'pro' ? '???' : '??????????'}
+                            value={me?.plan === 'pro' ? 'PRO' : 'Бесплатный'}
                             subtitle="Статус подписки"
                         />
                         <StatCard

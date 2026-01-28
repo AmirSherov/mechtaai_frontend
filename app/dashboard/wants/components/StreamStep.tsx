@@ -86,7 +86,7 @@ export default function StreamStep({ onComplete }: StreamStepProps) {
                 onComplete()
             }
         } catch (e) {
-            console.error('?? ??????? ????????? ?????', e)
+            console.error('Не удалось сохранить мысль', e)
             // Restore thought to input?
             setInputValue(t)
         }
@@ -115,15 +115,17 @@ export default function StreamStep({ onComplete }: StreamStepProps) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
-                <h2 className="text-3xl font-bold text-white">????? ???????</h2>
-                <p className="text-gray-400 max-w-lg mx-auto text-lg">????????? ?????? ?? 10 ?????. ??????????? ???, ??? ???????? ? ??????.
-                    ?? ?????????? ? ?? ?????????? ? ?????? ??????.</p>
+                <h2 className="text-3xl font-bold text-white">Поток желаний</h2>
+                <p className="text-gray-400 max-w-lg mx-auto text-lg">
+                    Пишите мысли в течение 10 минут. Сосредоточьтесь на том, чего хотите и почему.
+                    Не фильтруйте и не оценивайте — пишите быстро.
+                </p>
                 <button
                     onClick={handleStart}
                     disabled={sending}
                     className="px-8 py-4 bg-[#ff6b35] hover:bg-[#ff8c61] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[#ff6b35]/30 transform hover:-translate-y-1 active:translate-y-0 disabled:opacity-50"
                 >
-                    {sending ? '?????????...' : '????????? ?????? (10 ???)'}
+                    {sending ? 'Запуск...' : 'Начать поток (10 мин)'}
                 </button>
             </div>
         )
@@ -140,7 +142,7 @@ export default function StreamStep({ onComplete }: StreamStepProps) {
                     onClick={handleFinish}
                     className="text-gray-400 hover:text-white hover:underline text-sm"
                 >
-                    ????????? ??????
+                    Завершить поток
                 </button>
             </div>
 
@@ -158,7 +160,7 @@ export default function StreamStep({ onComplete }: StreamStepProps) {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSubmitThought()}
-                    placeholder="? ????..."
+                    placeholder="Я хочу..."
                     className="flex-1 bg-transparent border-none text-white focus:ring-0 placeholder-gray-500"
                     autoFocus
                 />
@@ -172,7 +174,7 @@ export default function StreamStep({ onComplete }: StreamStepProps) {
                     </svg>
                 </button>
             </div>
-            <p className="text-center text-xs text-gray-500">??????? Enter, ????? ???????? ?????</p>
+            <p className="text-center text-xs text-gray-500">Нажмите Enter, чтобы отправить мысль</p>
         </div>
     )
 }

@@ -27,7 +27,7 @@ const NEW_YEAR_OPTIONS = [
 
 const LOCALE_OPTIONS = [
     { value: 'ru-RU', label: 'Русский' },
-    { value: 'en-US', label: '??????????' }
+    { value: 'en-US', label: 'Английский' }
 ]
 
 function formatDateTime(value?: string | null) {

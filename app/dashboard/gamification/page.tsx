@@ -34,7 +34,7 @@ export default function GamificationPage() {
             setAchievements(achievementsData || [])
             setLeaderboard(leaderboardData || [])
         } catch (error) {
-            console.error('?? ??????? ????????? ?????? ????????????', error)
+            console.error('Ошибка при загрузке данных геймификации:', error)
         } finally {
             setLoading(false)
         }

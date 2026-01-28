@@ -45,14 +45,14 @@ export default function WantsWizard() {
             }
         } catch (err) {
             console.error(err)
-            setError('?? ??????? ????????? ???????? ?? ?????')
+            setError('Не удалось загрузить данные по желаниям')
         } finally {
             setLoading(false)
         }
     }
 
     if (loading) {
-        return <div className="p-8 text-center text-gray-400">????????...</div>
+        return <div className="p-8 text-center text-gray-400">Загрузка...</div>
     }
 
     if (error) {
@@ -60,30 +60,30 @@ export default function WantsWizard() {
     }
 
     if (!progress) {
-        return <div className="p-8 text-center text-gray-400">?????????????...</div>
+        return <div className="p-8 text-center text-gray-400">Нет данных...</div>
     }
 
     if (progress.status === 'completed') {
         return (
             <div className="space-y-6">
                 <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-6 text-green-400">
-                    <h2 className="text-xl font-bold mb-2">?????? ????????</h2>
-                    <p>???? ??????? ????????????????.</p>
+                    <h2 className="text-xl font-bold mb-2">Упражнение завершено</h2>
+                    <p>Ваши ответы сохранены.</p>
                 </div>
                 {analysis && (
                     <div className="glass p-6 rounded-xl space-y-4">
-                        <h3 className="text-xl font-bold text-white">??????</h3>
+                        <h3 className="text-xl font-bold text-white">Анализ</h3>
                         <p className="text-gray-300">{analysis.summary_comment}</p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <h4 className="font-bold text-[#ff6b35]">??????? ???????</h4>
+                                <h4 className="font-bold text-[#ff6b35]">Ключевые желания</h4>
                                 <ul className="list-disc pl-5 text-gray-300">
                                     {analysis.top_wants.map((w, i) => <li key={i}>{w}</li>)}
                                 </ul>
                             </div>
                             <div>
-                                <h4 className="font-bold text-[#ff6b35]">??????? ????</h4>
+                                <h4 className="font-bold text-[#ff6b35]">Ключевые боли</h4>
                                 <ul className="list-disc pl-5 text-gray-300">
                                     {analysis.top_pains.map((p, i) => <li key={i}>{p}</li>)}
                                 </ul>
@@ -121,8 +121,8 @@ export default function WantsWizard() {
 
             {progress.all_done && (
                 <div className="glass p-8 rounded-2xl text-center space-y-6">
-                    <h2 className="text-2xl font-bold text-white">?????? ? ???????</h2>
-                    <p className="text-gray-400">?? ?????? ??? ????.</p>
+                    <h2 className="text-2xl font-bold text-white">Готово к анализу</h2>
+                    <p className="text-gray-400"></p>
                     <button
                         onClick={async () => {
                             await apiClient.completeWants()
@@ -131,7 +131,7 @@ export default function WantsWizard() {
                         }}
                         className="px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-xl transition-colors"
                     >
-                        ????????? ? ????????????????
+                        Запустить анализ
                     </button>
                 </div>
             )}

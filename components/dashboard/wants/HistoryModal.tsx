@@ -52,7 +52,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                 setPage(pageNum)
             }
         } catch (error) {
-            console.error('?? ??????? ????????? ???????', error)
+            console.error('Не удалось загрузить историю', error)
         } finally {
             setLoading(false)
         }
@@ -98,7 +98,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                             <button
                                 onClick={onClose}
                                 className="w-11 h-11 rounded-full border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-                                aria-label="??????? ???????"
+                                aria-label="Закрыть окно"
                             >
                                 <svg className="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -110,7 +110,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                             <button
                                 onClick={() => setSelectedItem(null)}
                                 className="ml-auto w-11 h-11 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-                                aria-label="?????"
+                                aria-label="Назад"
                             >
                                 <svg className="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -122,7 +122,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                             <button
                                 onClick={onClose}
                                 className="w-11 h-11 rounded-full border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
-                                aria-label="??????? ???????"
+                                aria-label="Закрыть окно"
                             >
                                 <svg className="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

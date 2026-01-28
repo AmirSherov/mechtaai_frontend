@@ -81,7 +81,6 @@ export default function FutureStoryPage() {
                 setActiveHorizon('5y')
             }
         } catch (error) {
-            console.error('?? ??????? ????????? ??????? ????????', error)
             toast.error('Не удалось загрузить Историю будущего')
         } finally {
             setLoading(false)
@@ -137,7 +136,6 @@ export default function FutureStoryPage() {
                     error?.response?.data?.error?.message ||
                     error?.response?.data?.message ||
                     'Не удалось сохранить ответ'
-                console.error('?? ??????? ????????? ???????? ???????', error)
                 toast.error(message)
             } finally {
                 setSavingKey(null)
@@ -203,7 +201,6 @@ export default function FutureStoryPage() {
                 errorCode === 'FUTURE_STORY_DRAFT_NOT_FOUND' || errorCode === 'FUTURE_STORY_EMPTY_ANSWERS'
                     ? 'Нет сохранённых ответов для генерации. Откройте интервью, заполните ответы и попробуйте снова.'
                     : serverMessage || 'Не удалось сгенерировать историю'
-            console.error('?? ??????? ????????????? ???????', error)
             toast.error(message)
         } finally {
             setGenerating(false)
@@ -253,7 +250,6 @@ export default function FutureStoryPage() {
                 error?.response?.data?.error?.message ||
                 error?.response?.data?.message ||
                 'Не удалось сохранить изменения'
-            console.error('?? ??????? ???????? ???????', error)
             toast.error(message)
         } finally {
             setUpdating(false)

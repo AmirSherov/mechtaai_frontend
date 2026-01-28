@@ -61,7 +61,6 @@ export default function QRLoginPage() {
                 description: 'Отсканируйте код в Telegram для входа'
             })
         } catch (err: any) {
-            setError(err.message || '?? ??????? ???????????????? ????')
             setStatus('error')
             toast.error('Ошибка', {
                 description: 'Не удалось создать QR-код. Попробуйте снова.'
@@ -93,7 +92,7 @@ export default function QRLoginPage() {
                         router.push('/dashboard')
                     }, 1000)
                 } else {
-                    setError('?? ??????? ?????')
+                    setError('Не удалось войти')
                     setStatus('error')
                     toast.error('Ошибка авторизации')
                 }

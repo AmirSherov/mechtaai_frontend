@@ -79,7 +79,7 @@ export default function StreamStep({ initialData, onComplete, apiClient }: Strea
                 onComplete()
             }
         } catch (error) {
-            console.error('?? ??????? ????????? ?????', error)
+            console.error('Не удалось сохранить мысль', error)
             // Revert optimistic? Or just error.
         }
     }

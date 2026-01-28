@@ -32,7 +32,7 @@ export default function FutureMeStep({ initialData, onComplete, apiClient }: Fut
             await apiClient.setFutureMe(text)
             setLastSaved(new Date())
         } catch (error) {
-            console.error('?? ??????? ?????????????', error)
+            console.error('Не удалось сохранить текст', error)
         } finally {
             if (!silent) setIsSaving(false)
         }
@@ -45,7 +45,7 @@ export default function FutureMeStep({ initialData, onComplete, apiClient }: Fut
             await apiClient.finishFutureMe()
             onComplete()
         } catch (error) {
-            console.error('?? ??????? ?????????', error)
+            console.error('Не удалось завершить упражнение', error)
         } finally {
             setIsSaving(false)
         }

@@ -50,7 +50,7 @@ export default function RitualsPage() {
             const data = await apiClient.getRitualsToday(session.accessToken)
             setTodayStatus(data || null)
         } catch (error) {
-            console.error('?? ??????? ????????? ???????', error)
+            console.error('Не удалось загрузить статус ритуалов', error)
             toast.error('Не удалось загрузить статус ритуалов')
         } finally {
             setLoading(false)
@@ -106,7 +106,7 @@ export default function RitualsPage() {
             loadData() // Refresh status
             closeModal()
         } catch (error) {
-            console.error('?? ??????? ????????? ??????', error)
+            console.error('Не удалось сохранить ритуал', error)
             toast.error('Ошибка при сохранении')
         } finally {
             setIsSubmitting(false)

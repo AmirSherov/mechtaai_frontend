@@ -36,13 +36,13 @@ export default function GoalDetailsPage() {
     const goalStatusLabel = (status?: string) => {
         switch (status) {
             case 'planned':
-                return '?????????????'
+                return 'Запланирована'
             case 'in_progress':
-                return '? ????????'
+                return 'В процессе'
             case 'done':
-                return '?????????'
+                return 'Выполнена'
             case 'dropped':
-                return '????????'
+                return 'Отменена'
             default:
                 return status || '?'
         }
@@ -51,13 +51,13 @@ export default function GoalDetailsPage() {
     const stepStatusLabel = (status?: string) => {
         switch (status) {
             case 'planned':
-                return '????????????'
+                return 'Запланирована'
             case 'in_progress':
-                return '? ????????'
+                return 'В процессе'
             case 'done':
-                return '????????'
+                return 'Выполнена'
             case 'skipped':
-                return '????????'
+                return 'Пропущена'
             default:
                 return status || '?'
         }
@@ -77,19 +77,6 @@ export default function GoalDetailsPage() {
         if (!goalId) return
         try {
             if (!silent) setLoading(true)
-            // Ideally we need getGoalById but getGoals can filter? No, standard is get list.
-            // Let's rely on getGoals() filtering or client side finding for now if API doesn't support getById directly.
-            // Wait, looking at apiClient.getGoals uses query params.
-            // Looking at backend routes: GET /goals (list), PUT /goals/{id}, DELETE /goals/{id}.
-            // Backend currently doesn't have GET /goals/{id} specifically, only list with filters.
-            // BUT... typically REST APIs have GET /goals/{id}. Let's check backend routes_goals.py again...
-            // It has GET /goals (list) and PUT /goals/{id}. It DOES NOT seem to have GET /goals/{id} explicitly in the snippet I saw earlier (lines 102-115).
-            // So I might have to fetch all goals and find one, OR update backend.
-            // Updating backend is safer but I can just fetch all for now or filter by ID if update backend.
-            // Let's try to fetch all and find. It's not efficient but works for MVP.
-            // Wait, I can upgrade backend quickly? No, let's stick to frontend request.
-            // Actually, I can use the existing list endpoint.
-
             const goalsData = await apiClient.getGoals()
             const foundGoal = goalsData?.find(g => g.id === goalId)
 
@@ -137,8 +124,8 @@ export default function GoalDetailsPage() {
             setIsEditGoalOpen(false)
             loadData(true)
         } catch (error) {
-            console.error('?? ??????? ???????? ????', error)
-            alert('?? ??????? ???????? ????')
+            console.error('Ошибка при обновлении цели:', error)
+            alert('Ошибка при обновлении цели')
         } finally {
             setActionLoading(false)
         }
@@ -151,7 +138,7 @@ export default function GoalDetailsPage() {
             await apiClient.deleteGoal(goalId)
             router.push('/dashboard/goals')
         } catch (error) {
-            console.error('?? ??????? ??????? ????', error)
+            console.error('Ошибка при удалении цели:', error)
         } finally {
             setActionLoading(false)
         }
@@ -165,8 +152,8 @@ export default function GoalDetailsPage() {
             setIsCreateStepOpen(false)
             loadData(true)
         } catch (error) {
-            console.error('?? ??????? ??????? ???', error)
-            alert('?? ??????? ??????? ???')
+            console.error('Ошибка при создании шага:', error)
+            alert('Ошибка при создании шага')
         } finally {
             setActionLoading(false)
         }
@@ -180,8 +167,8 @@ export default function GoalDetailsPage() {
             setEditingStep(null)
             loadData(true)
         } catch (error) {
-            console.error('?? ??????? ???????? ???', error)
-            alert('?? ??????? ???????? ???')
+            console.error('Ошибка при обновлении шага:', error)
+            alert('Ошибка при обновлении шага')
         } finally {
             setActionLoading(false)
         }
@@ -194,7 +181,7 @@ export default function GoalDetailsPage() {
             await apiClient.deleteStep(id)
             loadData(true)
         } catch (error) {
-            console.error('?? ??????? ??????? ???', error)
+            console.error('Ошибка при удалении шага:', error)
         } finally {
             setStepLoadingId(null)
         }
@@ -216,7 +203,7 @@ export default function GoalDetailsPage() {
             // Optimistic
             setSteps(steps.map(s => s.id === step.id ? { ...s, status: newStatus } : s))
         } catch (error) {
-            console.error('?? ??????? ???????? ??????', error)
+            console.error('Ошибка при обновлении шага:', error)
             loadData(true)
         } finally {
             setStepLoadingId(null)
@@ -234,8 +221,8 @@ export default function GoalDetailsPage() {
                 setGeneratedPlan(result)
             }
         } catch (error) {
-            console.error('?? ??????? ????????????? ????', error)
-            alert('?? ??????? ????????????? ????')
+            console.error('Ошибка при генерации плана:', error)
+            alert('Ошибка при генерации плана')
         } finally {
             setIsGeneratingPlan(false)
         }
@@ -281,7 +268,7 @@ export default function GoalDetailsPage() {
             setIsPlanModalOpen(false)
             loadData(true)
         } catch (error) {
-            console.error('?? ??????? ????????? ????', error)
+            console.error('Ошибка при сохранении сгенерированного плана:', error)
         } finally {
             setActionLoading(false)
         }

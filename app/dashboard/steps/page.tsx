@@ -157,7 +157,7 @@ export default function StepsPage() {
                 const goalId = plan.goal_id // Note: backend schema says goal_id: str, ensure it matches existing goal IDs
                 // Quarters
                 for (const q of plan.quarters || []) {
-                    // ?????? as a step? Or actions?
+                    // Квартал как шаг? Или действия?
                     for (const action of q.key_actions || []) {
                         stepsToSave.push({
                             goal_id: goalId,
@@ -168,7 +168,7 @@ export default function StepsPage() {
                         })
                     }
                 }
-                // Weeklies (Templates) -> We can add them as "???????????? ????" steps?
+                // Weeklies (Templates) -> можем добавить их как "еженедельные шаги"?
                 for (const t of plan.weekly_templates || []) {
                     for (const action of t.recommended_actions || []) {
                         stepsToSave.push({
