@@ -41,7 +41,7 @@ export default function WantsWizard({ accessToken }: { accessToken: string }) {
                     // Create new draft
                     currentDraft = await apiClient.createWantsDraft()
                 } else {
-                    console.error('Failed to get draft', e)
+                    console.error('?? ??????? ???????? ????????', e)
                 }
             }
 
@@ -60,7 +60,7 @@ export default function WantsWizard({ accessToken }: { accessToken: string }) {
             }
 
         } catch (error) {
-            console.error('Failed to load wants data', error)
+            console.error('?? ??????? ????????? ?????? ?? ?????', error)
         } finally {
             setLoading(false)
         }
@@ -98,7 +98,7 @@ export default function WantsWizard({ accessToken }: { accessToken: string }) {
                 setAnalyzing(false) // Done
             }
         } catch (error) {
-            console.error('Analysis failed', error)
+            console.error('?? ??????? ????????? ??????', error)
             setAnalyzing(false)
             alert('Не удалось завершить анализ. Попробуйте еще раз.')
         }
@@ -121,20 +121,33 @@ export default function WantsWizard({ accessToken }: { accessToken: string }) {
     ]
 
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 relative">
-            {/* Header / History Button */}
-            <div className="absolute top-0 right-4 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-8 pt-16 md:pt-8 relative">
+            {/* Header / Actions */}
+            <div className="flex items-center justify-between gap-3 mb-6">
+                <div className="flex items-center gap-2">
+                    {currentStep > 0 && currentStep < 3 && (
+                        <button
+                            onClick={() => setCurrentStep((prev) => Math.max(0, prev - 1))}
+                            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-gray-200 btn-glass"
+                        >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Назад
+                        </button>
+                    )}
+                </div>
                 <button
                     onClick={() => setShowHistory(true)}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#2a2a2a] hover:bg-[#333] border border-[#333] rounded-xl text-gray-400 hover:text-white transition-all text-sm"
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-gray-200 transition-all text-sm btn-glass"
                 >
-                    <span>📜</span>
+                    <span>📘</span>
                     <span className="hidden md:inline">История</span>
                 </button>
             </div>
 
             {/* Progress Bar */}
-            <div className="flex justify-between items-center mb-12 relative mt-8">
+            <div className="flex justify-between items-center mb-12 relative mt-2">
                 <div className="absolute top-1/2 left-0 w-full h-1 bg-[#333] -z-10 rounded-full"></div>
                 <div
                     className="absolute top-1/2 left-0 h-1 bg-gradient-to-r from-[#ff6b35] to-purple-600 -z-10 rounded-full transition-all duration-500"
@@ -194,16 +207,16 @@ export default function WantsWizard({ accessToken }: { accessToken: string }) {
                                 <button
                                     onClick={handleCompleteWants}
                                     disabled={analyzing}
-                                    className="group relative px-12 py-5 bg-gradient-to-r from-[#ff6b35] to-purple-600 rounded-2xl font-bold text-xl text-white shadow-2xl shadow-[#ff6b35]/20 hover:scale-105 transition-all disabled:opacity-70 disabled:hover:scale-100"
+                                    className="group relative px-12 py-5 rounded-2xl font-bold text-xl text-white shadow-2xl shadow-[#ff6b35]/20 btn-glass disabled:opacity-70 disabled:hover:scale-100"
                                 >
                                     {analyzing ? (
                                         <div className="flex items-center gap-3">
                                             <div className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                            <span>AI Анализирует вашу личность...</span>
+                                            <span>AI анализирует вашу личность...</span>
                                         </div>
                                     ) : (
                                         <div className="flex items-center gap-3">
-                                            <span>Запустить Полный Анализ</span>
+                                            <span>Запустить полный анализ</span>
                                             <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                                             </svg>

@@ -20,6 +20,10 @@ export default function FutureMeStep({ initialData, onComplete, apiClient }: Fut
         }
     }, [initialData])
 
+    const MIN_WORDS = 50
+    const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0
+    const canFinish = wordCount >= MIN_WORDS
+
     // Auto-save logic (debounce could be here, but for now manual or on blur/finish)
     const saveText = async (silent = false) => {
         if (!text.trim()) return
@@ -28,7 +32,7 @@ export default function FutureMeStep({ initialData, onComplete, apiClient }: Fut
             await apiClient.setFutureMe(text)
             setLastSaved(new Date())
         } catch (error) {
-            console.error('Auto-save failed', error)
+            console.error('?? ??????? ?????????????', error)
         } finally {
             if (!silent) setIsSaving(false)
         }
@@ -41,7 +45,7 @@ export default function FutureMeStep({ initialData, onComplete, apiClient }: Fut
             await apiClient.finishFutureMe()
             onComplete()
         } catch (error) {
-            console.error('Finish failed', error)
+            console.error('?? ??????? ?????????', error)
         } finally {
             setIsSaving(false)
         }
@@ -69,25 +73,30 @@ export default function FutureMeStep({ initialData, onComplete, apiClient }: Fut
                     onChange={(e) => setText(e.target.value)}
                     onBlur={() => saveText(true)} // Auto-save on blur
                     placeholder="Мне 40 лет. Я просыпаюсь в..."
-                    className="w-full h-96 bg-[#2a2a2a]/50 border border-[#333] rounded-2xl p-6 text-gray-200 focus:outline-none focus:border-purple-500/50 transition-colors resize-none leading-relaxed text-lg"
+                    className="w-full h-96 bg-black/20 border border-white/10 rounded-2xl p-6 text-gray-200 focus:outline-none focus:border-purple-500/50 transition-colors resize-none leading-relaxed text-lg"
                 />
                 <div className="absolute bottom-4 right-4 text-xs text-gray-500">
                     {lastSaved ? `Сохранено в ${lastSaved.toLocaleTimeString()}` : 'Текст сохраняется автоматически'}
                 </div>
             </div>
 
+            <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
+                <span>Минимум {MIN_WORDS} слов. Сейчас {wordCount}.</span>
+                <span>Минимум {MIN_WORDS} слов. Сейчас {wordCount}.</span>
+            </div>
+
             <div className="flex justify-end gap-4">
                 <button
                     onClick={() => saveText(false)}
                     disabled={isSaving}
-                    className="px-6 py-2 text-gray-400 hover:text-white transition-colors"
+                    className="px-6 py-2 text-gray-200 btn-glass"
                 >
                     Сохранить черновик
                 </button>
                 <button
                     onClick={handleFinish}
-                    disabled={isSaving || text.length < 50}
-                    className="px-8 py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSaving || !canFinish}
+                    className="px-8 py-3 text-white rounded-xl font-medium btn-glass disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isSaving ? 'Сохранение...' : 'Завершить упражнение'}
                 </button>

@@ -191,7 +191,7 @@ class ApiClient {
         return response.data.result
     }
 
-    async updateStep(id: string, payload: Partial<StepIn>) {
+    async updateStep(id: string, payload: StepIn) {
         const response = await this.client.put<ApiResponse<Step>>(`/api/v1/steps/${id}`, payload)
         return response.data.result
     }

@@ -27,7 +27,7 @@ const NEW_YEAR_OPTIONS = [
 
 const LOCALE_OPTIONS = [
     { value: 'ru-RU', label: 'Русский' },
-    { value: 'en-US', label: 'English' }
+    { value: 'en-US', label: '??????????' }
 ]
 
 function formatDateTime(value?: string | null) {
@@ -242,15 +242,6 @@ export default function SettingsPage() {
                                 <input
                                     type="text"
                                     value={profile?.user.email ?? ''}
-                                    readOnly
-                                    className="w-full bg-[#111] border border-[#333] rounded-xl px-4 py-3 text-gray-500 cursor-not-allowed"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm text-gray-400">Telegram ID</label>
-                                <input
-                                    type="text"
-                                    value={profile?.user.telegram_id ?? '—'}
                                     readOnly
                                     className="w-full bg-[#111] border border-[#333] rounded-xl px-4 py-3 text-gray-500 cursor-not-allowed"
                                 />

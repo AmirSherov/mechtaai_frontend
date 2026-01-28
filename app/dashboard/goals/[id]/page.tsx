@@ -32,6 +32,36 @@ export default function GoalDetailsPage() {
     // AI Plan states
     const [isGeneratingPlan, setIsGeneratingPlan] = useState(false)
     const [generatedPlan, setGeneratedPlan] = useState<any>(null)
+
+    const goalStatusLabel = (status?: string) => {
+        switch (status) {
+            case 'planned':
+                return '?????????????'
+            case 'in_progress':
+                return '? ????????'
+            case 'done':
+                return '?????????'
+            case 'dropped':
+                return '????????'
+            default:
+                return status || '?'
+        }
+    }
+
+    const stepStatusLabel = (status?: string) => {
+        switch (status) {
+            case 'planned':
+                return '????????????'
+            case 'in_progress':
+                return '? ????????'
+            case 'done':
+                return '????????'
+            case 'skipped':
+                return '????????'
+            default:
+                return status || '?'
+        }
+    }
     const [isPlanModalOpen, setIsPlanModalOpen] = useState(false)
 
     useEffect(() => {
@@ -107,8 +137,8 @@ export default function GoalDetailsPage() {
             setIsEditGoalOpen(false)
             loadData(true)
         } catch (error) {
-            console.error('Failed to update goal', error)
-            alert('Failed to update goal')
+            console.error('?? ??????? ???????? ????', error)
+            alert('?? ??????? ???????? ????')
         } finally {
             setActionLoading(false)
         }
@@ -121,7 +151,7 @@ export default function GoalDetailsPage() {
             await apiClient.deleteGoal(goalId)
             router.push('/dashboard/goals')
         } catch (error) {
-            console.error('Failed to delete goal', error)
+            console.error('?? ??????? ??????? ????', error)
         } finally {
             setActionLoading(false)
         }
@@ -135,8 +165,8 @@ export default function GoalDetailsPage() {
             setIsCreateStepOpen(false)
             loadData(true)
         } catch (error) {
-            console.error('Failed to create step', error)
-            alert('Failed to create step')
+            console.error('?? ??????? ??????? ???', error)
+            alert('?? ??????? ??????? ???')
         } finally {
             setActionLoading(false)
         }
@@ -150,8 +180,8 @@ export default function GoalDetailsPage() {
             setEditingStep(null)
             loadData(true)
         } catch (error) {
-            console.error('Failed to update step', error)
-            alert('Failed to update step')
+            console.error('?? ??????? ???????? ???', error)
+            alert('?? ??????? ???????? ???')
         } finally {
             setActionLoading(false)
         }
@@ -164,7 +194,7 @@ export default function GoalDetailsPage() {
             await apiClient.deleteStep(id)
             loadData(true)
         } catch (error) {
-            console.error('Failed to delete step', error)
+            console.error('?? ??????? ??????? ???', error)
         } finally {
             setStepLoadingId(null)
         }
@@ -186,7 +216,7 @@ export default function GoalDetailsPage() {
             // Optimistic
             setSteps(steps.map(s => s.id === step.id ? { ...s, status: newStatus } : s))
         } catch (error) {
-            console.error('Failed to toggle status', error)
+            console.error('?? ??????? ???????? ??????', error)
             loadData(true)
         } finally {
             setStepLoadingId(null)
@@ -204,8 +234,8 @@ export default function GoalDetailsPage() {
                 setGeneratedPlan(result)
             }
         } catch (error) {
-            console.error('AI Generation failed', error)
-            alert('AI Generation failed')
+            console.error('?? ??????? ????????????? ????', error)
+            alert('?? ??????? ????????????? ????')
         } finally {
             setIsGeneratingPlan(false)
         }
@@ -251,7 +281,7 @@ export default function GoalDetailsPage() {
             setIsPlanModalOpen(false)
             loadData(true)
         } catch (error) {
-            console.error('Failed to save plan', error)
+            console.error('?? ??????? ????????? ????', error)
         } finally {
             setActionLoading(false)
         }
@@ -285,7 +315,7 @@ export default function GoalDetailsPage() {
                                 goal.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400' :
                                     'bg-gray-700 text-gray-400'
                                 }`}>
-                                {goal.status}
+                                {goalStatusLabel(goal.status)}
                             </span>
                         </div>
                         <p className="text-gray-400 text-lg mb-4">{goal.description || 'Нет описания'}</p>
@@ -409,7 +439,7 @@ export default function GoalDetailsPage() {
                                     {step.description && <p className="text-gray-400 text-sm mt-1">{step.description}</p>}
                                     <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                                         <span>{step.planned_date || 'Без даты'}</span>
-                                        {step.status !== 'planned' && step.status !== 'done' && <span className="capitalize text-orange-400">{step.status}</span>}
+                                        {step.status !== 'planned' && step.status !== 'done' && <span className="capitalize text-orange-400">{stepStatusLabel(step.status)}</span>}
                                     </div>
                                 </div>
 

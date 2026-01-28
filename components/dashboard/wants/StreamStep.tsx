@@ -79,7 +79,7 @@ export default function StreamStep({ initialData, onComplete, apiClient }: Strea
                 onComplete()
             }
         } catch (error) {
-            console.error('Failed to send text', error)
+            console.error('?? ??????? ????????? ?????', error)
             // Revert optimistic? Or just error.
         }
     }
@@ -132,7 +132,7 @@ export default function StreamStep({ initialData, onComplete, apiClient }: Strea
                     <button
                         onClick={startStream}
                         disabled={isLoading}
-                        className="px-8 py-3 gradient-orange text-white rounded-xl font-medium hover:opacity-90 transition-opacity text-lg"
+                        className="px-8 py-3 rounded-xl font-medium text-lg text-white btn-glass"
                     >
                         {isLoading ? 'Запуск...' : 'Начать упражнение'}
                     </button>
@@ -145,10 +145,10 @@ export default function StreamStep({ initialData, onComplete, apiClient }: Strea
                         )}
 
                         {/* Stream Chat Area */}
-                        <div className="max-w-2xl mx-auto bg-[#2a2a2a]/50 rounded-2xl border border-[#333] p-6 h-96 flex flex-col">
+                        <div className="max-w-2xl mx-auto glass rounded-2xl border border-white/10 p-6 h-96 flex flex-col">
                             <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-2 custom-scrollbar">
                                 {streamHistory.map((line, idx) => (
-                                    <div key={idx} className="bg-[#333] p-3 rounded-lg rounded-tl-none text-left text-gray-200 animate-fade-in">
+                                    <div key={idx} className="bg-white/5 p-3 rounded-lg rounded-tl-none text-left text-gray-200 animate-fade-in">
                                         {line}
                                     </div>
                                 ))}
@@ -163,11 +163,11 @@ export default function StreamStep({ initialData, onComplete, apiClient }: Strea
                                     onKeyDown={handleKeyDown}
                                     placeholder="Я хочу..."
                                     autoFocus // Always focus when active
-                                    className="flex-1 bg-[#1a1a1a] border border-[#333] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ff6b35] transition-colors"
+                                    className="flex-1 bg-black/20 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ff6b35]/60 transition-colors"
                                 />
                                 <button
                                     onClick={submitLine}
-                                    className="bg-[#333] hover:bg-[#444] text-white p-3 rounded-xl transition-colors"
+                                    className="text-white p-3 rounded-xl btn-glass"
                                 >
                                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
@@ -180,7 +180,7 @@ export default function StreamStep({ initialData, onComplete, apiClient }: Strea
                             <button
                                 onClick={finishStream}
                                 disabled={isLoading}
-                                className="px-6 py-2 border border-[#333] hover:bg-[#333] text-gray-400 rounded-xl transition-colors"
+                                className="px-6 py-2 text-gray-200 rounded-xl btn-glass"
                             >
                                 {isLoading ? 'Завершение...' : 'Закончить упражнение'}
                             </button>

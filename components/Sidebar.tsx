@@ -44,15 +44,15 @@ export default function Sidebar() {
                             <Link
                                 key={item.name}
                                 href={item.href}
-                                className={`
+                                    className={`
                   group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200
                   ${isActive
-                                        ? 'bg-[#ff6b35]/10 text-[#ff6b35] border border-[#ff6b35]/20 shadow-[0_0_10px_rgba(255,107,53,0.1)]'
-                                        : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                        ? 'text-[#ffb089] border-l-2 border-[#ff6b35]/70 bg-transparent'
+                                        : 'text-gray-400 hover:text-white'
                                     }
                 `}
                             >
-                                <div className={`${isActive ? 'text-[#ff6b35]' : 'text-gray-500 group-hover:text-white'} transition-colors`}>
+                                <div className={`${isActive ? 'text-[#ffb089]' : 'text-gray-500 group-hover:text-white'} transition-colors`}>
                                     {item.icon}
                                 </div>
                                 <span className="ml-3">{item.name}</span>

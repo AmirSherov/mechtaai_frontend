@@ -16,6 +16,22 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
     const [page, setPage] = useState(1)
     const [hasMore, setHasMore] = useState(false)
     const [selectedItem, setSelectedItem] = useState<WantsRawPublic | null>(null)
+    const statusLabel = (status?: string) => {
+        switch (status) {
+            case 'completed':
+                return 'Завершено'
+            case 'in_progress':
+                return 'В процессе'
+            case 'pending':
+                return 'Ожидание'
+            case 'draft':
+                return 'Черновик'
+            case 'failed':
+                return 'Ошибка'
+            default:
+                return status || '—'
+        }
+    }
 
     useEffect(() => {
         if (isOpen) {
@@ -36,7 +52,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                 setPage(pageNum)
             }
         } catch (error) {
-            console.error('Failed to load history', error)
+            console.error('?? ??????? ????????? ???????', error)
         } finally {
             setLoading(false)
         }
@@ -64,51 +80,68 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
 
             {/* Modal Container */}
             <div className={`
-                relative bg-[#121212] md:bg-[#181818]/90 md:backdrop-blur-xl border-t md:border border-white/10
+                relative bg-gradient-to-b from-[#171717] via-[#121212] to-[#0b0b0b] md:bg-[#151515]/95 md:backdrop-blur-xl
+                border-t md:border border-white/10
                 w-full h-[100dvh] md:h-[85vh] md:max-w-5xl md:rounded-3xl shadow-2xl flex flex-col overflow-hidden
                 transform transition-all duration-300 animate-in slide-in-from-bottom-10 md:slide-in-from-bottom-0 md:zoom-in-95
             `}>
 
+                <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[#ff6b35]/10 blur-3xl pointer-events-none" aria-hidden />
+                <div className="absolute -bottom-28 -left-24 h-72 w-72 rounded-full bg-purple-500/10 blur-3xl pointer-events-none" aria-hidden />
+                
+
+
                 {/* Mobile Header */}
-                <div className="md:hidden sticky top-0 z-30 bg-[#121212] border-b border-white/5">
+                <div className="md:hidden sticky top-0 z-30 bg-[#121212]/95 backdrop-blur border-b border-white/5 pt-2 pb-2">
                     {selectedItem ? (
-                        <div className="p-4 flex items-center gap-3">
-                            <button
-                                onClick={() => setSelectedItem(null)}
-                                className="p-2 -ml-2 text-gray-400 hover:text-white active:bg-white/10 rounded-full transition-colors"
-                            >
-                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                </svg>
-                            </button>
-                            <div className="flex-1">
-                                <h3 className="text-white font-medium text-sm">Сессия от {new Date(selectedItem.created_at).toLocaleDateString()}</h3>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="p-4 flex justify-between items-center">
-                            <h2 className="text-xl font-bold text-white">История</h2>
+                        <div className="relative px-4 py-2 flex items-center">
                             <button
                                 onClick={onClose}
-                                className="p-2 border border-white/10 rounded-full text-gray-400 hover:text-white active:bg-white/10 transition-colors"
+                                className="w-11 h-11 rounded-full border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                                aria-label="??????? ???????"
                             >
-                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg className="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
+                            <h3 className="absolute left-1/2 -translate-x-1/2 text-white font-medium text-sm">
+                                Сессия от {new Date(selectedItem.created_at).toLocaleDateString()}
+                            </h3>
+                            <button
+                                onClick={() => setSelectedItem(null)}
+                                className="ml-auto w-11 h-11 rounded-full text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                                aria-label="?????"
+                            >
+                                <svg className="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="relative px-4 py-2 flex items-center">
+                            <button
+                                onClick={onClose}
+                                className="w-11 h-11 rounded-full border border-white/10 text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                                aria-label="??????? ???????"
+                            >
+                                <svg className="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                            <h2 className="absolute left-1/2 -translate-x-1/2 text-xl font-bold text-white">История</h2>
                         </div>
                     )}
                 </div>
 
                 {/* Desktop Header */}
-                <div className="hidden md:flex p-6 border-b border-white/5 justify-between items-center bg-white/[0.02]">
+                <div className="hidden md:flex p-6 border-b border-white/5 justify-between items-center bg-white/[0.03]">
                     <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
                         <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#ff6b35] to-purple-600 flex items-center justify-center text-sm shadow-lg shadow-purple-500/20">📜</span>
                         Архив Желаний
                     </h2>
                     <button
                         onClick={onClose}
-                        className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors text-gray-400 hover:text-white"
+                        className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors text-gray-300 hover:text-white"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -139,7 +172,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                                         key={item.id}
                                         onClick={() => setSelectedItem(item)}
                                         className={`w-full text-left p-4 rounded-xl transition-all duration-200 group ${selectedItem?.id === item.id
-                                            ? 'bg-gradient-to-r from-white/10 to-transparent border-l-2 border-[#ff6b35]'
+                                            ? 'bg-gradient-to-r from-white/10 to-transparent border-l-2 border-[#ff6b35] shadow-[0_0_0_1px_rgba(255,107,53,0.15)]'
                                             : 'hover:bg-white/5 border-l-2 border-transparent hover:border-white/20'
                                             }`}
                                     >
@@ -153,7 +186,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                                         </div>
                                         <div className="flex justify-between items-center text-xs text-gray-500 group-hover:text-gray-400">
                                             <span>{new Date(item.created_at).toLocaleTimeString().slice(0, 5)}</span>
-                                            <span className="capitalize opacity-60">{item.status}</span>
+                                            <span className="opacity-70">{statusLabel(item.status)}</span>
                                         </div>
                                     </button>
                                 ))
@@ -172,7 +205,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
 
                     {/* Content View */}
                     <div className={`
-                        flex-1 overflow-y-auto bg-[#0a0a0a] md:bg-transparent custom-scrollbar
+                        flex-1 overflow-y-auto bg-[#0d0d0d] md:bg-transparent custom-scrollbar
                         transition-transform duration-300 md:transform-none
                         ${selectedItem ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
                         absolute inset-0 md:static z-20 md:z-auto
@@ -181,10 +214,12 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                             <div className="max-w-3xl mx-auto p-4 md:p-8 space-y-8 animate-fade-in pb-20 md:pb-8">
 
                                 {/* Session Info Card (Mobile only details) */}
-                                <div className="md:hidden bg-white/5 p-4 rounded-2xl mb-6">
+                                <div className="md:hidden bg-white/10 p-4 rounded-2xl mb-6 border border-white/10">
                                     <div className="flex justify-between text-sm text-gray-400">
                                         <span>Статус</span>
-                                        <span className={selectedItem.status === 'completed' ? 'text-green-400' : 'text-yellow-400'}>{selectedItem.status}</span>
+                                        <span className={selectedItem.status === 'completed' ? 'text-green-400' : 'text-yellow-400'}>
+                                            {statusLabel(selectedItem.status)}
+                                        </span>
                                     </div>
                                 </div>
 
@@ -194,7 +229,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                                         <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#ff6b35] to-orange-400 mb-4 flex items-center gap-2">
                                             Поток желаний
                                         </h3>
-                                        <div className="bg-[#181818] p-6 rounded-2xl text-gray-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap border border-white/5 shadow-inner">
+                                        <div className="bg-white/[0.06] p-6 rounded-2xl text-gray-200 text-sm md:text-base leading-relaxed whitespace-pre-wrap break-all border border-white/10 shadow-inner">
                                             {selectedItem.raw_wants_stream || <span className="text-gray-600 italic">Нет записей</span>}
                                         </div>
                                     </section>
@@ -204,7 +239,7 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                                         <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-purple-600 mb-4 flex items-center gap-2">
                                             Письмо в будущее
                                         </h3>
-                                        <div className="bg-[#181818] p-6 rounded-2xl text-gray-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap border border-white/5 shadow-inner">
+                                        <div className="bg-white/[0.06] p-6 rounded-2xl text-gray-200 text-sm md:text-base leading-relaxed whitespace-pre-wrap break-all border border-white/10 shadow-inner">
                                             {selectedItem.raw_future_me || <span className="text-gray-600 italic">Нет записей</span>}
                                         </div>
                                     </section>
@@ -215,15 +250,15 @@ export default function HistoryModal({ isOpen, onClose, accessToken }: HistoryMo
                                             От обратного
                                         </h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="bg-[#181818] p-5 rounded-2xl border border-white/5">
+                                            <div className="bg-white/[0.05] p-5 rounded-2xl border border-white/10 break-all">
                                                 <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Зависть</div>
                                                 <div className="text-gray-300 text-sm">{selectedItem.raw_envy || '—'}</div>
                                             </div>
-                                            <div className="bg-[#181818] p-5 rounded-2xl border border-white/5">
+                                            <div className="bg-white/[0.05] p-5 rounded-2xl border border-white/10 break-all">
                                                 <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Сожаления</div>
                                                 <div className="text-gray-300 text-sm">{selectedItem.raw_regrets || '—'}</div>
                                             </div>
-                                            <div className="bg-[#181818] p-5 rounded-2xl border border-white/5 md:col-span-2">
+                                            <div className="bg-white/[0.05] p-5 rounded-2xl border border-white/10 break-all md:col-span-2">
                                                 <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">План на 5 лет</div>
                                                 <div className="text-gray-300 text-sm">{selectedItem.raw_what_to_do_5y || '—'}</div>
                                             </div>

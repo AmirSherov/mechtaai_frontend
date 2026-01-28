@@ -46,7 +46,7 @@ export default function VisualsPage() {
                 setGallery([])
             }
         } catch (error) {
-            console.error('Failed to load visuals data', error)
+            console.error('?? ??????? ????????? ????????????', error)
             toast.error('Не удалось загрузить данные визуализаций')
         } finally {
             setLoading(false)
@@ -92,7 +92,7 @@ export default function VisualsPage() {
                 error?.response?.data?.error?.message ||
                 error?.response?.data?.message ||
                 'Не удалось сгенерировать историю'
-            console.error('Generate future story failed', error)
+            console.error('?? ??????? ??????? ???????', error)
             toast.error(message)
         } finally {
             setCreatingStory(false)
@@ -127,7 +127,7 @@ export default function VisualsPage() {
                 error?.response?.data?.error?.message ||
                 error?.response?.data?.message ||
                 'Не удалось сгенерировать изображение'
-            console.error('Generate image failed', error)
+            console.error('?? ??????? ????????????? ???????????', error)
             toast.error(message)
         } finally {
             setKeyBusy(imageKey, false)
@@ -155,7 +155,7 @@ export default function VisualsPage() {
                 error?.response?.data?.error?.message ||
                 error?.response?.data?.message ||
                 'Не удалось перегенерировать изображение'
-            console.error('Regenerate image failed', error)
+            console.error('?? ??????? ???????????????? ???????????', error)
             toast.error(message)
         } finally {
             setAssetBusy(asset.id, false)

@@ -121,6 +121,17 @@ input[type='reset']:hover {
   transform: translateY(-1px);
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+}
+
+a:hover {
+  color: #ffb089;
+}
+
 .glass-orange {
   background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(255, 69, 0, 0.08) 100%);
   backdrop-filter: blur(16px) saturate(140%);

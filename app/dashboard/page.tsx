@@ -114,12 +114,6 @@ export default function DashboardPage() {
                             {me?.plan === 'pro' ? 'План Pro активен' : 'Бесплатный план'}
                         </p>
                     </div>
-                    <button
-                        onClick={() => router.push('/dashboard/settings')}
-                        className="px-4 py-2 rounded-xl text-sm text-gray-200 btn-glass"
-                    >
-                        Настройки профиля
-                    </button>
                 </div>
             </header>
 
@@ -138,7 +132,7 @@ export default function DashboardPage() {
                         />
                         <StatCard
                             title="Текущий план"
-                            value={me?.plan === 'pro' ? 'Pro' : 'Free'}
+                            value={me?.plan === 'pro' ? '???' : '??????????'}
                             subtitle="Статус подписки"
                         />
                         <StatCard
@@ -209,10 +203,6 @@ export default function DashboardPage() {
                                     <div className="flex justify-between">
                                         <span className="text-gray-500">Email</span>
                                         <span>{me?.user.email || session.user.email}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500">Telegram</span>
-                                        <span>{me?.user.telegram_id ? `ID ${me.user.telegram_id}` : 'Не привязан'}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-gray-500">Часовой пояс</span>

@@ -38,7 +38,7 @@ export default function EsotericsPage() {
                     error?.response?.data?.error?.message ||
                     error?.response?.data?.message ||
                     'Не удалось загрузить энергию дня'
-                console.error('Failed to load esoterics today', error)
+                console.error('?? ??????? ????????? ????????? ?? ???????', error)
                 toast.error(message)
                 setEnergy(null)
             } finally {

@@ -67,7 +67,7 @@ export default function GoalForm({ initialData, onSubmit, isLoading, onCancel }:
                         value={formData.area_id}
                         onChange={e => setFormData({ ...formData, area_id: e.target.value })}
                         className="w-full bg-[#2a2a2a] border border-[#333] rounded-xl px-4 py-2 text-white focus:outline-none focus:border-[#ff6b35]"
-                        placeholder="health, career, relationships..."
+                        placeholder="????????, ???????, ?????????..."
                     />
                 </div>
 

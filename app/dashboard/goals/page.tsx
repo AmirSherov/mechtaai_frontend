@@ -24,6 +24,23 @@ export default function GoalsPage() {
     const [isGenerating, setIsGenerating] = useState(false)
     const [generatedGoals, setGeneratedGoals] = useState<any>(null) // To store AI result before saving
 
+    
+    
+    const statusLabel = (status?: string) => {
+        switch (status) {
+            case 'planned':
+                return 'Запланировано'
+            case 'in_progress':
+                return 'В процессе'
+            case 'done':
+                return 'Выполнено'
+            case 'dropped':
+                return 'Отменено'
+            default:
+                return status || '—'
+        }
+    }
+
     useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/login')
@@ -53,8 +70,8 @@ export default function GoalsPage() {
             setIsCreateOpen(false)
             loadGoals()
         } catch (error) {
-            console.error('Failed to create goal', error)
-            alert('Failed to create goal')
+            console.error('Не удалось создать цель', error)
+            alert('Не удалось создать цель')
         }
     }
 
@@ -65,8 +82,8 @@ export default function GoalsPage() {
             setEditingGoal(null)
             loadGoals()
         } catch (error) {
-            console.error('Failed to update goal', error)
-            alert('Failed to update goal')
+            console.error('Не удалось обновить цель', error)
+            alert('Не удалось обновить цель')
         }
     }
 
@@ -76,7 +93,7 @@ export default function GoalsPage() {
             await apiClient.deleteGoal(id)
             loadGoals()
         } catch (error) {
-            console.error('Failed to delete goal', error)
+            console.error('Не удалось создать цель', error)
         }
     }
 
@@ -91,8 +108,8 @@ export default function GoalsPage() {
                 setGeneratedGoals(result)
             }
         } catch (error) {
-            console.error('AI Generation failed', error)
-            alert('AI Generation failed')
+            console.error('Не удалось сгенерировать цели', error)
+            alert('Не удалось сгенерировать цели')
         } finally {
             setIsGenerating(false)
         }
@@ -124,7 +141,7 @@ export default function GoalsPage() {
             setIsGenerateOpen(false)
             loadGoals()
         } catch (error) {
-            console.error('Failed to save generated goals', error)
+            console.error('Не удалось сохранить сгенерированные цели', error)
         }
     }
 
@@ -198,7 +215,7 @@ export default function GoalsPage() {
                                         goal.status === 'in_progress' ? 'bg-blue-500/20 text-blue-400' :
                                             'bg-gray-700 text-gray-400'
                                     }`}>
-                                    {goal.status}
+                                    {statusLabel(goal.status)}
                                 </span>
                                 <span className="text-xs text-gray-500 border border-[#333] px-2 py-1 rounded-md">{goal.horizon}</span>
                             </div>

@@ -36,7 +36,7 @@ export default function AnalysisView({ analysisData, onRetry }: AnalysisViewProp
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Top Wants */}
+                {/* ??????? ??????? */}
                 <div className="glass border border-[#333] rounded-3xl p-8 hover:border-green-500/30 transition-colors">
                     <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                         <span className="w-2 h-8 bg-green-500 rounded-full"></span>
@@ -55,7 +55,7 @@ export default function AnalysisView({ analysisData, onRetry }: AnalysisViewProp
                     </div>
                 </div>
 
-                {/* Top Pains */}
+                {/* ??????? ???? */}
                 <div className="glass border border-[#333] rounded-3xl p-8 hover:border-red-500/30 transition-colors">
                     <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                         <span className="w-2 h-8 bg-red-500 rounded-full"></span>

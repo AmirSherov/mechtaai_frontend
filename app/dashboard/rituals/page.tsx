@@ -50,7 +50,7 @@ export default function RitualsPage() {
             const data = await apiClient.getRitualsToday(session.accessToken)
             setTodayStatus(data || null)
         } catch (error) {
-            console.error('Failed to load rituals', error)
+            console.error('?? ??????? ????????? ???????', error)
             toast.error('Не удалось загрузить статус ритуалов')
         } finally {
             setLoading(false)
@@ -106,7 +106,7 @@ export default function RitualsPage() {
             loadData() // Refresh status
             closeModal()
         } catch (error) {
-            console.error('Failed to submit entry', error)
+            console.error('?? ??????? ????????? ??????', error)
             toast.error('Ошибка при сохранении')
         } finally {
             setIsSubmitting(false)
@@ -174,7 +174,7 @@ export default function RitualsPage() {
                         <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-yellow-500/20 transition-all"></div>
 
                         {morningLocked && (
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 flex items-end justify-center pb-6">
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 hidden sm:flex items-end justify-center pb-6">
                                 <span className="px-3 py-1 bg-black/60 text-xs uppercase tracking-wide text-gray-300 rounded-full border border-white/10">
                                     Доступно днём
                                 </span>
@@ -202,6 +202,13 @@ export default function RitualsPage() {
                                 <p className="text-gray-400">
                                     Зарядитесь энергией, определите фокус дня и настройтесь на победу.
                                 </p>
+                                {morningLocked && (
+                                    <div className="mt-4 sm:hidden">
+                                        <span className="px-3 py-1 bg-black/60 text-xs uppercase tracking-wide text-gray-300 rounded-full border border-white/10">
+                                            Доступно днём
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -222,7 +229,7 @@ export default function RitualsPage() {
                         <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-purple-500/20 transition-all"></div>
 
                         {eveningLocked && (
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 flex items-end justify-center pb-6">
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40 hidden sm:flex items-end justify-center pb-6">
                                 <span className="px-3 py-1 bg-black/60 text-xs uppercase tracking-wide text-gray-300 rounded-full border border-white/10">
                                     Доступно ночью
                                 </span>
@@ -250,7 +257,14 @@ export default function RitualsPage() {
                                 <p className="text-gray-400">
                                     Подведите итоги, проанализируйте день и очистите разум для сна.
                                 </p>
-                            </div>
+                                {eveningLocked && (
+                                    <div className="mt-4 sm:hidden">
+                                        <span className="px-3 py-1 bg-black/60 text-xs uppercase tracking-wide text-gray-300 rounded-full border border-white/10">
+                                            Доступно ночью
+                                        </span>
+                                    </div>
+                                )}
+                                </div>
                         </div>
                     </div>
                 </div>
@@ -994,3 +1008,6 @@ function NightMoonBackground() {
         </>
     )
 }
+
+
+

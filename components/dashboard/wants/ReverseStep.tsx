@@ -51,7 +51,7 @@ export default function ReverseStep({ initialData, onComplete, apiClient }: Reve
                 }
             }
         } catch (error) {
-            console.error('Save failed', error)
+            console.error('?? ??????? ?????????', error)
         } finally {
             setIsSaving(false)
         }
@@ -79,7 +79,7 @@ export default function ReverseStep({ initialData, onComplete, apiClient }: Reve
                     <textarea
                         value={envy}
                         onChange={(e) => setEnvy(e.target.value)}
-                        className="w-full h-32 bg-[#1a1a1a] border border-[#333] rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+                        className="w-full h-32 bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
                         placeholder="Я завидую..."
                     />
                 </div>
@@ -90,7 +90,7 @@ export default function ReverseStep({ initialData, onComplete, apiClient }: Reve
                     <textarea
                         value={regrets}
                         onChange={(e) => setRegrets(e.target.value)}
-                        className="w-full h-32 bg-[#1a1a1a] border border-[#333] rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+                        className="w-full h-32 bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
                         placeholder="Я буду жалеть, если не..."
                     />
                 </div>
@@ -101,7 +101,7 @@ export default function ReverseStep({ initialData, onComplete, apiClient }: Reve
                     <textarea
                         value={plan}
                         onChange={(e) => setPlan(e.target.value)}
-                        className="w-full h-32 bg-[#1a1a1a] border border-[#333] rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+                        className="w-full h-32 bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
                         placeholder="В ближайшие 5 лет мне нужно..."
                     />
                 </div>
@@ -111,7 +111,7 @@ export default function ReverseStep({ initialData, onComplete, apiClient }: Reve
                 <button
                     onClick={() => handleSave(true)}
                     disabled={isSaving || !envy || !regrets || !plan}
-                    className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-8 py-3 text-white rounded-xl font-medium btn-glass disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isSaving ? 'Сохранение...' : 'Завершить этап'}
                 </button>

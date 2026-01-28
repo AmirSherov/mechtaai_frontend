@@ -14,6 +14,23 @@ export default function StepsPage() {
     const [steps, setSteps] = useState<Step[]>([])
     const [goals, setGoals] = useState<Goal[]>([])
     const [loading, setLoading] = useState(true)
+    const [stepLoadingId, setStepLoadingId] = useState<string | null>(null)
+
+    
+    const statusLabel = (status?: string) => {
+        switch (status) {
+            case 'planned':
+                return 'Запланирован'
+            case 'in_progress':
+                return 'В процессе'
+            case 'done':
+                return 'Выполнен'
+            case 'skipped':
+                return 'Пропущен'
+            default:
+                return status || '—'
+        }
+    }
 
     // Modal states
     const [isCreateOpen, setIsCreateOpen] = useState(false)
@@ -56,8 +73,8 @@ export default function StepsPage() {
             setIsCreateOpen(false)
             loadData()
         } catch (error) {
-            console.error('Failed to create step', error)
-            alert('Failed to create step')
+            console.error('Не удалось создать шаг', error)
+            alert('Не удалось создать шаг')
         }
     }
 
@@ -68,8 +85,8 @@ export default function StepsPage() {
             setEditingStep(null)
             loadData()
         } catch (error) {
-            console.error('Failed to update step', error)
-            alert('Failed to update step')
+            console.error('Не удалось обновить шаг', error)
+            alert('Не удалось обновить шаг')
         }
     }
 
@@ -79,19 +96,29 @@ export default function StepsPage() {
             await apiClient.deleteStep(id)
             loadData()
         } catch (error) {
-            console.error('Failed to delete step', error)
+            console.error('Не удалось создать шаг', error)
         }
     }
 
     const toggleStepStatus = async (step: Step) => {
         const newStatus = step.status === 'done' ? 'planned' : 'done'
         try {
-            await apiClient.updateStep(step.id, { status: newStatus })
+            setStepLoadingId(step.id)
+            await apiClient.updateStep(step.id, {
+                goal_id: step.goal_id,
+                level: step.level,
+                title: step.title,
+                description: step.description,
+                planned_date: step.planned_date,
+                status: newStatus
+            })
             // Optimistic update
             setSteps(steps.map(s => s.id === step.id ? { ...s, status: newStatus } : s))
         } catch (error) {
-            console.error('Failed to toggle status', error)
+            console.error('Не удалось изменить статус', error)
             loadData() // Revert on error
+        } finally {
+            setStepLoadingId(null)
         }
     }
 
@@ -108,8 +135,8 @@ export default function StepsPage() {
                 setGeneratedPlan(result)
             }
         } catch (error) {
-            console.error('AI Generation failed', error)
-            alert('AI Generation failed')
+            console.error('Не удалось сгенерировать план', error)
+            alert('Не удалось сгенерировать план')
         } finally {
             setIsGenerating(false)
         }
@@ -130,7 +157,7 @@ export default function StepsPage() {
                 const goalId = plan.goal_id // Note: backend schema says goal_id: str, ensure it matches existing goal IDs
                 // Quarters
                 for (const q of plan.quarters || []) {
-                    // Summary as a step? Or actions?
+                    // ?????? as a step? Or actions?
                     for (const action of q.key_actions || []) {
                         stepsToSave.push({
                             goal_id: goalId,
@@ -141,7 +168,7 @@ export default function StepsPage() {
                         })
                     }
                 }
-                // Weeklies (Templates) -> We can add them as "Weekly routine" steps?
+                // Weeklies (Templates) -> We can add them as "???????????? ????" steps?
                 for (const t of plan.weekly_templates || []) {
                     for (const action of t.recommended_actions || []) {
                         stepsToSave.push({
@@ -165,12 +192,12 @@ export default function StepsPage() {
             setIsGenerateOpen(false)
             loadData()
         } catch (error) {
-            console.error('Failed to save generated plan', error)
+            console.error('Не удалось сохранить сгенерированный план', error)
             alert('Ошибка при сохранении плана')
         }
     }
 
-    const getGoalTitle = (id: string) => goals.find(g => g.id === id)?.title || 'Unknown Goal'
+    const getGoalTitle = (id: string) => goals.find(g => g.id === id)?.title || 'Неизвестная цель'
 
     if (status === 'loading') {
         return (
@@ -182,24 +209,24 @@ export default function StepsPage() {
 
     return (
         <div className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto">
-            <header className="flex flex-col gap-4 md:flex-row md:justify-between md:items-start">
+            <header className="flex flex-col gap-5 md:flex-row md:justify-between md:items-start">
                 <div>
-                    <h1 className="text-3xl font-bold text-white tracking-tight flex items-center gap-3">
-                        <span className="w-10 h-10 rounded-xl gradient-orange flex items-center justify-center shadow-lg shadow-[#ff6b35]/20">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-3">
+                        <span className="w-10 h-10 rounded-xl gradient-orange flex items-center justify-center shadow-lg shadow-[#ff6b35]/20 flex-shrink-0">
                             <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                             </svg>
                         </span>
                         Действия
                     </h1>
-                    <p className="text-gray-400 text-lg mt-2">
+                    <p className="text-gray-400 text-sm sm:text-lg mt-2 leading-relaxed">
                         План конкретных шагов для реализации ваших целей.
                     </p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                     <button
                         onClick={() => setIsGenerateOpen(true)}
-                        className="px-4 py-2 bg-[#2a2a2a] border border-[#333] text-white rounded-xl hover:bg-[#333] transition-colors flex items-center gap-2"
+                        className="w-full sm:w-auto px-4 py-2 bg-[#2a2a2a] border border-[#333] text-white rounded-xl hover:bg-[#333] transition-colors flex items-center justify-center gap-2"
                     >
                         <svg className="w-5 h-5 text-[#ff6b35]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -208,7 +235,7 @@ export default function StepsPage() {
                     </button>
                     <button
                         onClick={() => setIsCreateOpen(true)}
-                        className="px-4 py-2 gradient-orange text-white rounded-xl hover:opacity-90 transition-opacity flex items-center gap-2"
+                        className="w-full sm:w-auto px-4 py-2 gradient-orange text-white rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -232,29 +259,32 @@ export default function StepsPage() {
             ) : (
                 <div className="space-y-6">
                     {/* Group by Level? Or simply list. Let's start with a simple list but styled nicely */}
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:gap-5">
                         {steps.map((step) => (
                             <div
                                 key={step.id}
-                                className={`glass p-4 rounded-xl border border-[#333] hover:border-[#ff6b35]/30 transition-all flex items-start gap-4 ${step.status === 'done' ? 'opacity-60' : ''}`}
+                                className={`glass p-4 rounded-xl border border-[#333] hover:border-[#ff6b35]/30 transition-all flex flex-col sm:flex-row sm:items-start gap-4 ${step.status === 'done' ? 'opacity-60' : ''}`}
                             >
                                 <button
                                     onClick={() => toggleStepStatus(step)}
-                                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 transition-colors ${step.status === 'done' ? 'bg-green-500 border-green-500' : 'border-gray-500 hover:border-[#ff6b35]'}`}
+                                    disabled={stepLoadingId === step.id}
+                                    className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 transition-colors ${step.status === 'done' ? 'bg-green-500 border-green-500' : 'border-gray-500 hover:border-[#ff6b35]'} ${stepLoadingId === step.id ? 'cursor-wait' : ''}`}
                                 >
-                                    {step.status === 'done' && (
+                                    {stepLoadingId === step.id ? (
+                                        <span className="w-3 h-3 rounded-full border-2 border-white/50 border-t-white animate-spin"></span>
+                                    ) : step.status === 'done' && (
                                         <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                         </svg>
                                     )}
                                 </button>
 
-                                <div className="flex-1 cursor-pointer" onClick={() => setEditingStep(step)}>
-                                    <div className="flex justify-between items-start">
-                                        <h3 className={`text-lg font-medium text-white ${step.status === 'done' ? 'line-through text-gray-500' : ''}`}>{step.title}</h3>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs px-2 py-1 rounded bg-[#333] text-gray-300">{getGoalTitle(step.goal_id)}</span>
-                                            <span className={`text-xs px-2 py-1 rounded ${step.level === 'year' ? 'bg-purple-900/30 text-purple-400' :
+                                <div className="flex-1 cursor-pointer w-full" onClick={() => setEditingStep(step)}>
+                                    <div className="flex flex-col gap-2 sm:flex-row sm:justify-between sm:items-start">
+                                        <h3 className={`text-base sm:text-lg font-medium text-white leading-snug ${step.status === 'done' ? 'line-through text-gray-500' : ''}`}>{step.title}</h3>
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            <span className="text-[11px] sm:text-xs px-2.5 py-1 rounded-full bg-[#333] text-gray-300">{getGoalTitle(step.goal_id)}</span>
+                                            <span className={`text-[11px] sm:text-xs px-2.5 py-1 rounded-full ${step.level === 'year' ? 'bg-purple-900/30 text-purple-400' :
                                                     step.level === 'quarter' ? 'bg-blue-900/30 text-blue-400' :
                                                         step.level === 'month' ? 'bg-green-900/30 text-green-400' :
                                                             step.level === 'week' ? 'bg-yellow-900/30 text-yellow-400' :
@@ -264,16 +294,16 @@ export default function StepsPage() {
                                             </span>
                                         </div>
                                     </div>
-                                    {step.description && <p className="text-gray-400 text-sm mt-1">{step.description}</p>}
-                                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                                    {step.description && <p className="text-gray-400 text-sm mt-1 leading-relaxed">{step.description}</p>}
+                                    <div className="flex flex-wrap items-center gap-3 mt-2 text-[11px] sm:text-xs text-gray-500">
                                         <span>{step.planned_date || 'Без даты'}</span>
-                                        {step.status !== 'planned' && step.status !== 'done' && <span className="capitalize text-orange-400">{step.status}</span>}
+                                        {step.status !== 'planned' && step.status !== 'done' && <span className="capitalize text-orange-400">{statusLabel(step.status)}</span>}
                                     </div>
                                 </div>
 
                                 <button
                                     onClick={() => handleDelete(step.id)}
-                                    className="p-2 text-gray-600 hover:text-red-500 transition-colors"
+                                    className="p-2 text-gray-600 hover:text-red-500 transition-colors self-start sm:self-auto"
                                 >
                                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -339,7 +369,7 @@ export default function StepsPage() {
                             <button
                                 onClick={handleGenerate}
                                 disabled={isGenerating || selectedGoalIds.size === 0}
-                                className="px-6 py-2 gradient-orange text-white rounded-xl font-medium hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
+                                className="px-6 py-2 gradient-orange text-white rounded-xl font-medium hover:opacity-90 disabled:opacity-50 flex flex-wrap items-center gap-2"
                             >
                                 {isGenerating ? (
                                     <>
@@ -392,3 +422,5 @@ export default function StepsPage() {
         </div>
     )
 }
+
+
